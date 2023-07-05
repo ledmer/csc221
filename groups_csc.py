@@ -9,6 +9,7 @@ students = {
     "4":["CC","DD","AA"],
     "5":["Z"]
 }
+
 def Values():
     ns = 0
     for school in students:
