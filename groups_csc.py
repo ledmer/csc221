@@ -34,16 +34,19 @@ def form_groups(sxg):
                 students[school[0]].pop(rn)
             groups.append(list)
 
-#def rest(res):
-
- for school in students.items():
-    for r in range(res):
-        rn = random.randrange(len(students[school[0]]))
+def rest(res):
+    rests = []
+    for school in students.items():
         if len(students[school[0]]) > 0:
+           rests.append(school[1])
+    print(rests)
+
+        
+
             
 
 ns, sxg, ng, res = Values()
 form_groups(sxg)
-
+rest(res)
 print(groups)
 print(ns, sxg, ng, res)
