@@ -25,16 +25,15 @@ def serious_f(x, y):
 def move(i):
     if i == 0:
         return 0,0
-    if i == 1:
+    elif i == 1:
         return 120, 100
-    if i == 2:
+    elif i == 2:
         return -120, 100
-    if i == 3:
+    elif i == 3:
         return -120, -100
-    if i == 4:
+    elif i == 4:
         return 120, -100
 
-    return 
 begin_graphics()
 n = ""
 i = 0
