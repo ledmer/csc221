@@ -39,6 +39,12 @@ def rest(res):
     for school in students.items():
         if len(students[school[0]]) > 0:
            rests.append(school[1])
+    for i in range(len(rests)):
+        for k = j + 1; k < count;
+            if (number[j] > number[k])
+                temp = number[j];
+                number[j] = number[k];
+                number[k] = temp;
     print(rests)
 
         
