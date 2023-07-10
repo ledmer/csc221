@@ -46,7 +46,9 @@ while not n == "x":
         serious_f(x, y)
         n = update_when('key_pressed')
         i += 1
-        break
+        if n == "x":
+            break
+        clear_screen()
     x, y = move(i)
     stop_smiling(x, y)
     serious_f(x, y)
