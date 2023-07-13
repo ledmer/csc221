@@ -1,5 +1,5 @@
 import random
-global i
+
 i = 1
 def find_n(f):
     try:
