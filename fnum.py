@@ -1,5 +1,4 @@
 import random
-
 i = 1
 def find_n(f):
     try:
@@ -19,7 +18,7 @@ def find_n(f):
     print(f"it took you {f} tries")
 
 
-x = random.randint(0,1000)
+x = random.randint(0, 1000)
 print("Guess a number between 0 and 1000")
 find_n(i) 
 
