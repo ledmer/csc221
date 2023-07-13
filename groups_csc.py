@@ -53,5 +53,6 @@ def form_groups(sxg):
 
 ns, sxg, ng, res = Values()
 form_groups(sxg)
+rest(res)
 print(groups)
 print(ns, sxg, ng, res)
