@@ -1,26 +1,48 @@
 from gasp import *
 def lines():
-    
+    line_x = 0
+    line_y = 0
+    for y in range(0,480,10):
+        Line((0,y),(640,y),thickness=.01,color='lightgray')
+    for x in range(0,640,10):
+        Line((x,0),(x,640),thickness=.01,color='lightgray')
+
+def place_player(player_x,player_y):
+    Circle((10 * player_x + 5, 10 * player_y + 5), 5, filled=True)
+
+def start_screen():
+    key_text = Text("ROBOTS!!!", (320, 270), size=48)
+    key_text = Text("Press any key to start", (320, 100), size=12)
+    update_when('key_pressed')
+    clear_screen()
+
 begin_graphics()
+
+start_screen()
+
 lines()
-key_text = Text("ROBOTS!!!", (320, 270), size=48)
-key_text = Text("Press any key to start", (320, 100), size=12)
-update_when('key_pressed')
-clear_screen()
-p_x = 320
-p_y = 220
+player_x = 5
+player_y = 5
 while True:
-    player = Circle((p_x, p_y), 100)
+    player = Circle((10 * player_x + 5, 10 * player_y + 5), 5, filled=True)
     key = update_when('key_pressed')
     remove_from_screen(player)
     if key == 'Right':
-        p_x += 10
+        player_x += 1
     if key == 'Left':
-        p_x -= 10
+        player_x -= 1
     if key == 'Up':
-        p_y += 10
+        player_y += 1
     if key == 'Down': 
-        p_y -= 10 
-    elif key == "q":  
+        player_y -= 1
+    if player_x > 63:
+        player_x = 1
+    if player_y > 47:
+        player_y = 1
+    if player_x < 0:
+        player_x = 63
+    if player_y < 0:
+        player_y = 47
+    elif key == "q": 
         break       
 end_graphics()
