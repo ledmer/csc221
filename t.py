@@ -26,6 +26,9 @@ player_y = 5
 while True:
     player = Circle((10 * player_x + 5, 10 * player_y + 5), 5, filled=True)
     key = update_when('key_pressed')
+    for y in range(0,480,20):
+        key = update_when('key_pressed')
+        Text(key, (320, 100+y), size=12)
     remove_from_screen(player)
     if key == 'Right':
         player_x += 1
