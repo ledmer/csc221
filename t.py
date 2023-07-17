@@ -1,4 +1,6 @@
 from gasp import *
+import time
+
 def lines():
     line_x = 0
     line_y = 0
@@ -16,36 +18,61 @@ def start_screen():
     update_when('key_pressed')
     clear_screen()
 
-begin_graphics()
+begin_graphics(title = "Robots")
 
 start_screen()
 
 lines()
 player_x = 5
 player_y = 5
+robot_x = 40
+robot_y = 40
 while True:
     player = Circle((10 * player_x + 5, 10 * player_y + 5), 5, filled=True)
+    robot = Circle((10 * robot_x + 5, 10 * robot_y + 5), 5, filled=True, color="Red")
     key = update_when('key_pressed')
-    for y in range(0,480,20):
-        key = update_when('key_pressed')
-        Text(key, (320, 100+y), size=12)
     remove_from_screen(player)
-    if key == 'Right':
+    if key == 'KP_Right':
         player_x += 1
-    if key == 'Left':
+    elif key == 'KP_Left':
         player_x -= 1
-    if key == 'Up':
+    elif key == 'KP_Up':
         player_y += 1
-    if key == 'Down': 
+    elif key == 'KP_Down':
         player_y -= 1
-    if player_x > 63:
+    elif key == 'KP_Prior':
+        player_x += 1 
+        player_y += 1
+    elif key == 'KP_Home':
+        player_x -= 1 
+        player_y += 1 
+    elif key == 'KP_End':
+        player_x -= 1
+        player_y -= 1 
+    elif key == 'KP_Next': 
+        player_x += 1 
+        player_y -= 1 
+    if player_x == 63:
         player_x = 1
-    if player_y > 47:
+    if player_y == 47:
         player_y = 1
-    if player_x < 0:
+    if player_x == 0:
         player_x = 63
-    if player_y < 0:
+    if player_y == 0:
         player_y = 47
     elif key == "q": 
-        break       
+        break
+
+
+    if player_x > robot_x:
+        robot_x += 1
+    elif player_x < robot_x:
+        robot_x -= 1
+    if player_y > robot_y:
+        robot_y += 1
+    elif player_y < robot_y:
+        robot_y -= 1
+    remove_from_screen(robot)
+    
+
 end_graphics()
