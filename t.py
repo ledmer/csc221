@@ -25,11 +25,12 @@ def GGame():
     player_y = 5
     robot_x = 40
     robot_y = 40
-    while True:
+    game = True
+    while game:
         player = Circle((10 * player_x + 5, 10 * player_y + 5), 5, filled=True)
         robot = Circle((10 * robot_x + 5, 10 * robot_y + 5), 5, filled=True, color="Red")
         key = update_when('key_pressed')
-        remove_from_screen(player)
+        
         if key == 'KP_Right':
             player_x += 1
         elif key == 'KP_Left':
@@ -59,10 +60,10 @@ def GGame():
         if player_y == 0:
             player_y = 47
         elif key == "q":
-            end_graphics()
+            return
+        remove_from_screen(player)
         if player_x == robot_x and player_y == robot_y: 
-            break
-
+            game = False
         if player_x > robot_x:
             robot_x += 1
         elif player_x < robot_x:
@@ -72,14 +73,13 @@ def GGame():
         elif player_y < robot_y:
             robot_y -= 1
         remove_from_screen(robot)
+    time.sleep(1)
     clear_screen()
     Text("You Lost :'c",(320, 270), size=40)
     key_text = Text("Press esc to stop playing", (320, 100), size=12)
     man = update_when('key_pressed')
     if man == "Escape":
-        end_graphics()
-    time.sleep(10)
-
+        return
     GGame()
 
 
