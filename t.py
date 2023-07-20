@@ -39,24 +39,24 @@ def py():
     key = update_when('key_pressed')
     remove_from_screen(robot)
     Text(key,(320, 100), size=12)
-    if key == 'KP_6':
+    if key == 'KP_Right':
         player_x += 1
-    elif key == 'KP_4':
+    elif key == 'KP_Left':
         player_x -= 1
-    elif key == 'KP_8':
+    elif key == 'KP_Up':
         player_y += 1
-    elif key == 'KP_2':
+    elif key == 'KP_Down':
         player_y -= 1
-    elif key == 'KP_9':
+    elif key == 'KP_Prior':
         player_x += 1 
         player_y += 1
-    elif key == 'KP_7':
+    elif key == 'KP_Home':
         player_x -= 1 
         player_y += 1 
-    elif key == 'KP_1':
+    elif key == 'KP_End':
         player_x -= 1
         player_y -= 1 
-    elif key == 'KP_3': 
+    elif key == 'KP_Next': 
         player_x += 1 
         player_y -= 1 
     if player_x == 63:
@@ -88,7 +88,7 @@ def GGame():
     start_screen()
     lines()
     global game
-    global player_x
+    global player_x 
     global player_y 
     global robot_x
     global robot_y
