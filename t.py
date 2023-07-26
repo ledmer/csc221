@@ -2,6 +2,33 @@ from gasp import *
 import time
 from random import randint
 
+def junkgen():
+    global junk_x
+    global junk_y
+    global player_x
+    global player_y 
+    global robot_x
+    global robot_y
+    global robot
+    for zz in range(len(robot_x)-1):
+        z = zz + 1
+        while z < len(robot_x)-1:    
+            if robot_x[zz] == robot_x[z] and robot_y[zz] == robot_y[z]:
+                print("robot lost")
+                junk_x.append(robot_x.pop(z))
+                junk_y.append(robot_y.pop(z))
+                robot.pop(z)
+                robot_x.pop(zz)
+                robot_y.pop(zz)
+                robot.pop(zz)
+            z += 1
+        for m in range(len(junk_x)-1):
+            if robot_x[zz] == junk_x[m] and robot_y[zz] == junk_x[m]:
+                robot_x.pop(zz)
+                robot_y.pop(zz)
+                robot.pop(zz)
+    for jk in range(len(junk_x)):
+        Box((10 * junk_x[jk],10 *  junk_y[jk]), 10,10,color = color.GREEN)
 def robotcraft ():
     global player_x
     global player_y 
@@ -114,13 +141,12 @@ def GGame(i):
     global robot_x
     global robot_y
     global robot
-    global junk
     global junk_x
     global junk_y
     robot_x = []
     robot_y = []
     robot = []
-    junk = []
+
     junk_y = []
     junk_x = []
     game = True
@@ -129,26 +155,11 @@ def GGame(i):
     robotcraft()
     while game:
         i += 1
-        for mm in range(len(robot_x)):
-            if (player_x == robot_x[mm]) and (player_y == robot_y[mm]):
-                game = False
-        for zz in range(len(robot_x)-1):
-            z = zz + 1
-            while z < len(robot_x)-1:
-                
-                if robot_x[zz] == robot_x[z] and robot_y[zz] == robot_y[z]:
-                    print("robot lost")
-                    junk_x.append(robot_x.pop(z))
-                    junk_y.append(robot_y.pop(z))
-                    robot.pop(z)
-                    robot_x.pop(zz)
-                    robot_y.pop(zz)
-                    robot.pop(zz)
-                z += 1
-        for jk in range(len(junk_x)):
-            Box((10 * junk_x[jk],10 *  junk_y[jk]), 10,10,color = color.GREEN)
+       # for mm in range(len(robot_x)):
+            #if (player_x == robot_x[mm]) and (player_y == robot_y[mm]):
+                #game = False
+        junkgen()
         py()
-
         rob(i)
         
     lost = loose()
