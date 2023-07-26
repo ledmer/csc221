@@ -2,6 +2,17 @@ from gasp import *
 import time
 from random import randint
 
+def teleport():
+    global player_x
+    global player_y
+    while True:
+        new_x = randint(1, 63)
+        new_y = randint(1, 47)
+        
+        if new_x != robot_x and new_y != robot_y:
+            player_x = new_x
+            player_y = new_y
+            break
 def junkgen():
     global junk_x
     global junk_y
@@ -10,9 +21,19 @@ def junkgen():
     global robot_x
     global robot_y
     global robot
+    global junk
+    AA = []
+    for a in range(len(robot_x)):
+        for m in range(len(junk_x)):
+            if robot_x[a] == junk_x[m] and robot_y[a] == junk_y[m]:
+                AA.append(a)
+    for inde in AA:   
+        robot_x.pop(inde)
+        robot_y.pop(inde)
+        robot.pop(inde)
     for zz in range(len(robot_x)-1):
         z = zz + 1
-        while z < len(robot_x)-1:    
+        while z < len(robot_x):    
             if robot_x[zz] == robot_x[z] and robot_y[zz] == robot_y[z]:
                 print("robot lost")
                 junk_x.append(robot_x.pop(z))
@@ -22,13 +43,17 @@ def junkgen():
                 robot_y.pop(zz)
                 robot.pop(zz)
             z += 1
-        for m in range(len(junk_x)-1):
-            if robot_x[zz] == junk_x[m] and robot_y[zz] == junk_x[m]:
-                robot_x.pop(zz)
-                robot_y.pop(zz)
-                robot.pop(zz)
-    for jk in range(len(junk_x)):
-        Box((10 * junk_x[jk],10 *  junk_y[jk]), 10,10,color = color.GREEN)
+
+    for jk in range(len(junk_x) - 1):
+        jk2 = jk + 1
+        while jk2 < len(junk_x):
+            if (junk_x[jk] == junk_x[jk2] and junk_y[jk] == junk_y[jk2]):
+                junk.remove[jk]
+            jk2 += 1
+    for ju in range(len(junk_x)):
+        junk.append(Box((10 * junk_x[ju], 10 *  junk_y[ju]), 10, 10, color = color.GREEN, filled=True))
+
+
 def robotcraft ():
     global player_x
     global player_y 
@@ -37,9 +62,9 @@ def robotcraft ():
     global robot
     x = randint(2, 62)
     y = randint(2, 47)
-    while x > player_x-10 and x < player_x+10:
+    while x > player_x - 10 and x < player_x + 10:
         x = randint(2, 47)
-    while y > player_y-10 and y < player_y+10:
+    while y > player_y - 10 and y < player_y + 10:
         y = randint(2, 63)
     robot_x.append(x)
     robot_y.append(y)
@@ -63,7 +88,7 @@ def rob(i):
     global robot_x
     global robot_y
     
-    if i % 4 == 0:
+    if i % 4 == 0 and len(robot_x) < 10:
         robotcraft()
 
     for ra in range(len(robot_x)-1): 
@@ -77,6 +102,7 @@ def rob(i):
         elif player_y < robot_y[ra]:
             robot_y[ra] -= 1
 def py():
+    global key
     global player_x
     global player_y 
     global robot_x
@@ -85,8 +111,9 @@ def py():
     
     player = Circle((10 * player_x + 5, 10 * player_y + 5), 5, filled=True)
     key = update_when('key_pressed')
-    for ra in robot:
-        remove_from_screen(ra)
+
+    for ro in robot:
+        remove_from_screen(ro)
     if key == 'KP_Right'or key == 'KP_6' :
         player_x += 1
     elif key == 'KP_Left'or key == 'KP_4':
@@ -107,13 +134,16 @@ def py():
     elif key == 'KP_Next'or key == 'KP_3': 
         player_x += 1 
         player_y -= 1 
-    if player_x == 63:
+    elif key == "t":
+        teleport()
+
+    if player_x > 63:
         player_x = 1
-    if player_y == 47:
+    if player_y > 47:
         player_y = 1
-    if player_x == 0:
+    if player_x < 0:
         player_x = 63
-    if player_y == 0:
+    if player_y < 0:
         player_y = 47
 
     remove_from_screen(player)
@@ -143,10 +173,13 @@ def GGame(i):
     global robot
     global junk_x
     global junk_y
+    global key
+    global junk
+    key = ""
     robot_x = []
     robot_y = []
     robot = []
-
+    junk = []
     junk_y = []
     junk_x = []
     game = True
@@ -155,12 +188,15 @@ def GGame(i):
     robotcraft()
     while game:
         i += 1
-       # for mm in range(len(robot_x)):
-            #if (player_x == robot_x[mm]) and (player_y == robot_y[mm]):
-                #game = False
-        junkgen()
+        for mm in range(len(robot_x)):
+            if (key == "g"):
+                continue
+            if (player_x == robot_x[mm]) and (player_y == robot_y[mm]):
+                game = False
         py()
+        junkgen()
         rob(i)
+        
         
     lost = loose()
     if not lost:
