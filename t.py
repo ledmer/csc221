@@ -1,6 +1,22 @@
 from gasp import *
 import time
 from random import randint
+
+def robotcraft ():
+    global player_x
+    global player_y 
+    global robot_x
+    global robot_y
+    global robot
+    x = randint(2, 62)
+    y = randint(2, 47)
+    while x > player_x-10 and x < player_x+10:
+        x = randint(2, 47)
+    while y > player_y-10 and y < player_y+10:
+        y = randint(2, 63)
+    robot_x.append(x)
+    robot_y.append(y)
+
 def loose():
     time.sleep(1)
     clear_screen()
@@ -20,16 +36,9 @@ def rob(i):
     global robot_x
     global robot_y
     
-    if i % 2 == 0:    
-        x = randint(2, 62)
-        y = randint(2,47)
-        while x > player_x-10 and x < player_x+10:
-            x = randint(2, 47)
-        while y > player_y-10 and y < player_y+10:
-            y = randint(2, 63)
-        robot_x.append(x)
-        robot_y.append(y)
-        
+    if i % 4 == 0:
+        robotcraft()
+
     for ra in range(len(robot_x)-1): 
         robot.append(Circle((10 * robot_x[ra] + 5, 10 * robot_y[ra] + 5), 5, filled=True, color="Red"))
         if player_x > robot_x[ra]:
@@ -50,27 +59,25 @@ def py():
     player = Circle((10 * player_x + 5, 10 * player_y + 5), 5, filled=True)
     key = update_when('key_pressed')
     for ra in robot:
-        print("") 
         remove_from_screen(ra)
-    Text(key,(320, 100), size=12)
-    if key == 'KP_Right':
+    if key == 'KP_Right'or key == 'KP_6' :
         player_x += 1
-    elif key == 'KP_Left':
+    elif key == 'KP_Left'or key == 'KP_4':
         player_x -= 1
-    elif key == 'KP_Up':
+    elif key == 'KP_Up'or key == 'KP_8':
         player_y += 1
-    elif key == 'KP_Down':
+    elif key == 'KP_Down'or key == 'KP_2':
         player_y -= 1
-    elif key == 'KP_Prior':
+    elif key == 'KP_Prior'or key == 'KP_9':
         player_x += 1 
         player_y += 1
-    elif key == 'KP_Home':
+    elif key == 'KP_Home'or key == 'KP_7':
         player_x -= 1 
         player_y += 1 
-    elif key == 'KP_End':
+    elif key == 'KP_End'or key == 'KP_1':
         player_x -= 1
         player_y -= 1 
-    elif key == 'KP_Next': 
+    elif key == 'KP_Next'or key == 'KP_3': 
         player_x += 1 
         player_y -= 1 
     if player_x == 63:
@@ -107,28 +114,43 @@ def GGame(i):
     global robot_x
     global robot_y
     global robot
+    global junk
+    global junk_x
+    global junk_y
     robot_x = []
     robot_y = []
     robot = []
+    junk = []
+    junk_y = []
+    junk_x = []
     game = True
     player_x = randint(2,63)
     player_y = randint(2,47)
-    x = randint(2, 62)
-    y = randint(2, 47)
-    while x > player_x-10 and x < player_x+10:
-        x = randint(2, 47)
-    while y > player_y-10 and y < player_x+10:
-        y = randint(2, 63)
-    robot_x.append(x)
-    robot_y.append(y)
+    robotcraft()
     while game:
         i += 1
         for mm in range(len(robot_x)):
-            if player_x == robot_x[mm] and player_y == robot_y[mm]:
+            if (player_x == robot_x[mm]) and (player_y == robot_y[mm]):
                 game = False
+        for zz in range(len(robot_x)-1):
+            z = zz + 1
+            while z < len(robot_x)-1:
+                
+                if robot_x[zz] == robot_x[z] and robot_y[zz] == robot_y[z]:
+                    print("robot lost")
+                    junk_x.append(robot_x.pop(z))
+                    junk_y.append(robot_y.pop(z))
+                    robot.pop(z)
+                    robot_x.pop(zz)
+                    robot_y.pop(zz)
+                    robot.pop(zz)
+                z += 1
+        for jk in range(len(junk_x)):
+            Box((10 * junk_x[jk],10 *  junk_y[jk]), 10,10,color = color.GREEN)
         py()
-        rob(i)
 
+        rob(i)
+        
     lost = loose()
     if not lost:
         GGame(i)
