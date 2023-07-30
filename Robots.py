@@ -3,6 +3,7 @@ import time
 from random import randint
 import screenrobots as screen
 
+
 def check_lost():
     global playing, robot_x, robot_y, robots, player_x, player_y
     for robot in range(len(robot_x)):
@@ -18,11 +19,6 @@ def place_player():
     player_x = randint(2,63)
     player_y = randint(2,47)
     player = Circle((10 * player_x + 5, 10 * player_y + 5), 5, filled=True)
-class Player:
-    pass
-
-class Robot:
-    pass
 
 def collided(thing1, list_of_things):
     for thing2 in list_of_things:
@@ -149,22 +145,10 @@ def player_move():
     move_to(player, (10 * player_x + 5, 10 * player_y + 5))
     time.sleep(0.02)
 
-
 def Game():
     screen.start_screen()
     screen.lines()
-    global playing
-    global player_x 
-    global player_y 
-    global robot_x
-    global robot_y
-    global robots
-    global junk_x
-    global junk_y
-    global key
-    global junk
-    global turn
-    global teleport_times
+    global playing, player_x, player_y, robot_x, robot_y, robots, junk_x, junk_y, key, junk, turn, teleport_times
     key = ""
     robot_x = []
     robot_y = []
@@ -175,16 +159,15 @@ def Game():
     playing = True
     teleport_times = 0
     turn = 0
+    robot_max = 0
     place_player()
     place_robot()
-    robot_max = 0
     while playing:
         turn += 1 
         if turn % 4 == 0 and robot_max < 10:
             place_robot()
             robot_max += 1
         player_move()
-
         move_robot()
         junkgen()
         lost = check_lost() 
@@ -194,9 +177,6 @@ def Game():
         keep_playing = screen.win_screen(turn, teleport_times)
     if keep_playing:
         Game()
-
-
 begin_graphics(title = "Robots")
-
 Game()
 end_graphics()
