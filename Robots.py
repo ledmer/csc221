@@ -55,8 +55,8 @@ def junkgen():
         del_robot2 = del_robot1 + 1
         while del_robot2 < len(robot_x):
             if robot_x[del_robot1] == robot_x[del_robot2] and robot_y[del_robot1] == robot_y[del_robot2]:
-                del_robots.append(del_robot2)
                 del_robots.append(del_robot1)
+                del_robots.append(del_robot2)
 
                 junk_x.append(robot_x[del_robot2])
                 junk_y.append(robot_y[del_robot2])
@@ -72,7 +72,7 @@ def junkgen():
                 junk.pop(junk1)
             junk2 += 1
     print(del_robots,"delrob")
-    print(robots, "rob")
+    print(len(robots))
     for del_robot in del_robots:
         robot_x.pop(del_robot)
         robot_y.pop(del_robot)
