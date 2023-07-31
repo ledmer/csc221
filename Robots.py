@@ -2,21 +2,21 @@ from gasp import *
 import time
 from random import randint
 import screenrobots as screen
-class Junk:
+class Junk :
     pass
 class Player:   
     pass
 class Robot:
     pass
 def check_lost():
-    global playing, robot_x, robot_y, robots
-    for robot in range(len(robot_x)):
-        if ((player.x == robot_x[robot]) and (player.y == robot_y[robot])):
+    global playing, robots
+    for robot in robots:
+        if ((player.x == robot.x) and (player.y == robot.y)):
             playing = False
             return True
     if len(robots) == 0:
         playing = False
-     
+        return False
 def place_player():
     global player
     player = Player()
@@ -24,97 +24,78 @@ def place_player():
     player.y = randint(2,47)
     player.shape = Circle((10 * player.x + 5, 10 * player.y + 5), 5, filled=True)
 
-def collided(thing1, list_of_things):
-    for thing2 in list_of_things:
-        if thing1.x == thing2.x and thing1.y == thing2.y:
-            return True
-    return False
-
 def teleport():
-    global player
-    while True:
-        new_x = randint(1, 63)
-        new_y = randint(1, 47)
-        
-        if new_x != robot_x and new_y != robot_y:
-            player.x = new_x
-            player.y = new_y
-            break
+    global player, robots, key, teleport_times
+    still_same = True
+    while still_same:
+        still_same = False
+        player.x = randint(1, 63)
+        player.y = randint(1, 47)
+        for robot in robots:
+            if player.x == robot.x and player.y == robot.y:
+                player.x = randint(1, 63)
+                player.y = randint(1, 47)
+                still_same = True
+    move_to(player.shape, (10 * player.x + 5, 10 * player.y + 5))
+    key = update_when('key_pressed')
+    teleport_times += 1
+
 def junkgen():
-    global junk_x, junk_y, robot_x, robot_y, robots, junk
+    global robots, junks
     del_robots = []
-    for rob_index in range(len(robot_x)):
-        for junk_index in range(len(junk_x)):
-            if robot_x[rob_index] == junk_x[junk_index] and robot_y[rob_index] == junk_y[junk_index]:
-                del_robots.append(rob_index)
-                print(rob_index , "s")
+    for robot in robots:
+        for junk in junks:
+            if robot.x == junk.x and robot.y == junk.y:
+                del_robots.append(robot)
 
-    for del_robot1 in range(len(robot_x) - 1):
-        del_robot2 = del_robot1 + 1
-        while del_robot2 < len(robot_x):
-            if robot_x[del_robot1] == robot_x[del_robot2] and robot_y[del_robot1] == robot_y[del_robot2]:
-                if del_robot1 not in del_robots:
-                    del_robots.append(del_robot1)
-                if del_robot2 not in del_robots:
-                    del_robots.append(del_robot2)
-
-                junk_x.append(robot_x[del_robot2])
-                junk_y.append(robot_y[del_robot2])
-            del_robot2 += 1
-
-    for junk_ind in range(len(junk_x)):
-            junk.append(Box((10 * junk_x[junk_ind], 10 *  junk_y[junk_ind]), 10, 10, color = color.GREEN, filled=True))
-    
-    for junk1 in range(len(junk_x) - 1):
-        junk2 = junk1 + 1
-        while junk2 < len(junk_x):
-            if (junk_x[junk1] == junk_x[junk2] and junk_y[junk1] == junk_y[junk2]):
-                junk.pop(junk1)
-            junk2 += 1
-    print(del_robots,"delrob")
-    print(len(robots))
-    i = 0
+    for A in range(len(robots) - 1):
+        B = A + 1
+        while B < len(robots):
+            if robots[A].x == robots[B].x and robots[A].y == robots[B].y:
+                if robots[A] not in del_robots:
+                    del_robots.append(robots[A])
+                if robots[B] not in del_robots:
+                    del_robots.append(robots[B])
+                junk = Junk()
+                junk.x = robots[A].x
+                junk.y = robots[A].y
+                junk.shape = (Box((10 * junk.x, 10 *  junk.y), 10, 10, color = color.GREEN, filled=True))
+                junks.append(junk)  
+            B += 1
     for del_robot in del_robots:
-        robot_x.pop(del_robot - i)
-        robot_y.pop(del_robot - i)
-        robots.pop(del_robot - i)
-        i += 1
+        robots.remove(del_robot)
 def place_robot ():
-    global player, robot_x, robot_y, robots
-
-    x = randint(2, 62)
-    y = randint(2, 47)
-    while x > player.x - 10 and x < player.x + 10:
-        x = randint(2, 47)
-    while y > player.y - 10 and y < player.y + 10:
-        y = randint(2, 63)
-    robot_x.append(x)
-    robot_y.append(y)
-    robots.append(Circle((10 * robot_x[-1] + 5, 10 * robot_y[-1] + 5), 5, filled=True, color="Red"))
-   
+    global player, robots
+    robot = Robot()
+    robot.x = randint(2, 62)
+    robot.y = randint(2, 47)
+    while robot.x > player.x - 10 and robot.x < player.x + 10:
+        robot.x = randint(2, 63)
+    while robot.y > player.y - 10 and robot.y < player.y + 10:
+        robot.y = randint(2, 47)
+    robot.shape = (Circle((10 * robot.x + 5, 10 * robot.y + 5), 5, filled=True, color="Red"))
+    robots.append(robot)
 def move_robot():
-    global robots, playing, robot_x, robot_y
+    global robots, playing
 
-    for rob in range(len(robot_x)): 
-        if player.x > robot_x[rob]:
-            robot_x[rob] += 1
-        elif player.x < robot_x[rob]:
-            robot_x[rob] -= 1
-        if player.y > robot_y[rob]:
-            robot_y[rob] += 1
-        elif player.y < robot_y[rob]:
-            robot_y[rob] -= 1
-        move_to(robots[rob], (10 * robot_x[rob] + 5, 10 * robot_y[rob] + 5))
+    for robot in robots:
+        if player.x > robot.x:
+            robot.x += 1
+        elif player.x < robot.x:
+            robot.x -= 1
+        if player.y > robot.y:
+            robot.y += 1
+        elif player.y < robot.y:
+            robot.y -= 1
+        move_to(robot.shape, (10 * robot.x + 5, 10 * robot.y+ 5))
 
+        
 def player_move():
     global key, player, robots, teleport_times
 
     key = update_when('key_pressed')
     while key == "t":
         teleport()
-        move_to(player.shape, (10 * player.x + 5, 10 * player.y + 5))
-        key = update_when('key_pressed')
-        teleport_times += 1
     if key == 'KP_Right'or key == 'KP_6' :
         player.x += 1
     elif key == 'KP_Left'or key == 'KP_4':
@@ -146,17 +127,14 @@ def player_move():
     move_to(player.shape, (10 * player.x + 5, 10 * player.y + 5))
     time.sleep(0.02)
 
-def Game():
-    screen.start_screen()
+def Game(games_won):
+    if games_won == 0:
+        screen.start_screen()
     screen.lines()
-    global playing, robot_x, robot_y, robots, junk_x, junk_y, key, junk, turn, teleport_times
+    global playing, robots, key, junks, turn, teleport_times
     key = ""
-    robot_x = []
-    robot_y = []
+    junks = []
     robots = []
-    junk = []
-    junk_y = []
-    junk_x = []
     playing = True
     teleport_times = 0
     turn = 0
@@ -164,20 +142,27 @@ def Game():
     place_player()
     place_robot()
     while playing:
+        
         turn += 1 
         if turn % 4 == 0 and robot_max < 10:
             place_robot()
             robot_max += 1
         player_move()
         move_robot()
+        print(len(robots))
         junkgen()
-        lost = check_lost() 
+        lost = check_lost()
+ 
     if lost:
-        keep_playing = screen.loose_screen()
-    else: 
-        keep_playing = screen.win_screen(turn, teleport_times)
+        keep_playing = screen.loose_screen(games_won)
+        games_won = 0
+    else:
+        games_won += 1
+        keep_playing = screen.win_screen(turn, teleport_times, games_won)
     if keep_playing:
-        Game()
+        Game(games_won)
+
 begin_graphics(title = "Robots")
-Game()
+games_won = 0
+Game(games_won)
 end_graphics()
