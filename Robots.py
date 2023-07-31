@@ -63,6 +63,7 @@ def junkgen():
                 junks.append(junk)  
             B += 1
     for del_robot in del_robots:
+        remove_from_screen(del_robot.shape)
         robots.remove(del_robot)
 def place_robot ():
     global player, robots
@@ -142,9 +143,8 @@ def Game(games_won):
     place_player()
     place_robot()
     while playing:
-        
         turn += 1 
-        if turn % 4 == 0 and robot_max < 10:
+        if turn % 2 == 0 and robot_max < 10 + games_won * 2:
             place_robot()
             robot_max += 1
         player_move()
