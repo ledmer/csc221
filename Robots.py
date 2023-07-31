@@ -96,7 +96,7 @@ def player_move():
     key = update_when('key_pressed')
     while key == "t":
         teleport()
-    if key == 'KP_Right'or key == 'KP_6' :
+    if key == 'KP_Right'or key == 'KP_6':
         player.x += 1
     elif key == 'KP_Left'or key == 'KP_4':
         player.x -= 1
