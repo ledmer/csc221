@@ -1,4 +1,5 @@
 from gasp import *
+
 def ordinal(n):
     if 4 <= n <= 20:
       suffix = 'th'
@@ -40,13 +41,13 @@ def loose_screen(games_won):
     clear_screen()
     return True
 
-def win_screen(turn, teleport_times, games_won):
+def win_screen(turn, games_won):
     time.sleep(1)
     clear_screen()
     Text("You WIN!!!",(320, 270), size=40)
 
     Text(f"{ordinal(games_won)} Game won!",(540, 440), size=15)
-    Text(f"It took you {turn} turns and {teleport_times} teleports!",(320, 160), size=20)
+    Text(f"It took you {turn} turns",(320, 160), size=20)
     Text("Press esc to stop playing, Enter to keep playing", (320, 100), size=12)
     key = update_when('key_pressed')
     while not key == "Return":

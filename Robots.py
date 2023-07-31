@@ -25,7 +25,8 @@ def place_player():
     player.shape = Circle((10 * player.x + 5, 10 * player.y + 5), 5, filled=True)
 
 def teleport():
-    global player, robots, key, teleport_times
+    global player, robots, key, teleport_times, tp_txt
+    remove_from_screen(tp_txt)
     still_same = True
     while still_same:
         still_same = False
@@ -37,8 +38,9 @@ def teleport():
                 player.y = randint(1, 47)
                 still_same = True
     move_to(player.shape, (10 * player.x + 5, 10 * player.y + 5))
+    tp_txt = Text(f"Teleport Left: {teleport_times}",(540, 440), size=15)
     key = update_when('key_pressed')
-    teleport_times += 1
+    teleport_times -= 1
 
 def junkgen():
     global robots, junks
@@ -92,10 +94,10 @@ def move_robot():
 
         
 def player_move():
-    global key, player, robots, teleport_times
-
+    global key, player, robots, teleport_times,tp_txt
     key = update_when('key_pressed')
-    while key == "t":
+    while key == "t" and not teleport_times == 0:
+        remove_from_screen(tp_txt)
         teleport()
     if key == 'KP_Right'or key == 'KP_6':
         player.x += 1
@@ -132,16 +134,17 @@ def Game(games_won):
     if games_won == 0:
         screen.start_screen()
     screen.lines()
-    global playing, robots, key, junks, turn, teleport_times
+    global playing, robots, key, junks, turn, teleport_times, tp_txt
     key = ""
     junks = []
     robots = []
     playing = True
-    teleport_times = 0
     turn = 0
     robot_max = 0
+    teleport_times = 5
     place_player()
     place_robot()
+    tp_txt = Text(f"Teleport Left: {teleport_times}",(540, 440), size=15)
     while playing:
         turn += 1 
         if turn % 2 == 0 and robot_max < 10 + games_won * 2:
@@ -158,7 +161,7 @@ def Game(games_won):
         games_won = 0
     else:
         games_won += 1
-        keep_playing = screen.win_screen(turn, teleport_times, games_won)
+        keep_playing = screen.win_screen(turn, games_won)
     if keep_playing:
         Game(games_won)
 
