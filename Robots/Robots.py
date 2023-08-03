@@ -24,23 +24,7 @@ def place_player():
     player.y = randint(2,47)
     player.shape = Circle((10 * player.x + 5, 10 * player.y + 5), 5, filled=True)
 
-def teleport():
-    global player, robots, key, teleport_times, tp_txt
-    remove_from_screen(tp_txt)
-    still_same = True
-    while still_same:
-        still_same = False
-        player.x = randint(1, 63)
-        player.y = randint(1, 47)
-        for robot in robots:
-            if player.x == robot.x and player.y == robot.y:
-                player.x = randint(1, 63)
-                player.y = randint(1, 47)
-                still_same = True
-    move_to(player.shape, (10 * player.x + 5, 10 * player.y + 5))
-    teleport_times -= 1
-    tp_txt = Text(f"Teleport Left: {teleport_times}",(540, 440), size=15)
-    key = update_when('key_pressed')
+
     
 
 def junkgen():
@@ -71,64 +55,11 @@ def junkgen():
 def place_robot ():
     global player, robots
     robot = Robot()
-    robot.x = randint(2, 62)
-    robot.y = randint(2, 47)
-    while robot.x > player.x - 10 and robot.x < player.x + 10:
-        robot.x = randint(2, 63)
-    while robot.y > player.y - 10 and robot.y < player.y + 10:
-        robot.y = randint(2, 47)
-    robot.shape = (Circle((10 * robot.x + 5, 10 * robot.y + 5), 5, filled=True, color="Red"))
-    robots.append(robot)
-def move_robot():
-    global robots, playing
 
-    for robot in robots:
-        if player.x > robot.x:
-            robot.x += 1
-        elif player.x < robot.x:
-            robot.x -= 1
-        if player.y > robot.y:
-            robot.y += 1
-        elif player.y < robot.y:
-            robot.y -= 1
-        move_to(robot.shape, (10 * robot.x + 5, 10 * robot.y+ 5))
+    robots.append(robot)
+
 
         
-def player_move():
-    global key, player, robots, teleport_times,tp_txt
-    key = update_when('key_pressed')
-    while key == "t" and not teleport_times == 0:
-        teleport()
-    if key == 'KP_Right'or key == 'KP_6':
-        player.x += 1
-    elif key == 'KP_Left'or key == 'KP_4':
-        player.x -= 1
-    elif key == 'KP_Up'or key == 'KP_8':
-        player.y += 1
-    elif key == 'KP_Down'or key == 'KP_2':
-        player.y -= 1
-    elif key == 'KP_Prior'or key == 'KP_9':
-        player.x += 1 
-        player.y += 1
-    elif key == 'KP_Home'or key == 'KP_7':
-        player.x -= 1 
-        player.y += 1 
-    elif key == 'KP_End'or key == 'KP_1':
-        player.x -= 1
-        player.y -= 1 
-    elif key == 'KP_Next'or key == 'KP_3': 
-        player.x += 1 
-        player.y -= 1 
-    if player.x > 63:
-        player.x = 1
-    if player.y > 47:
-        player.y = 1
-    if player.x < 0:
-        player.x = 63
-    if player.y < 0:
-        player.y = 47
-    move_to(player.shape, (10 * player.x + 5, 10 * player.y + 5))
-    time.sleep(0.02)
 
 def Game(games_won):
     if games_won == 0:
