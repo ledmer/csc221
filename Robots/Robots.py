@@ -1,5 +1,4 @@
 from gasp import *
-import time
 from random import randint
 import screenrobots as screen
 class Junk :

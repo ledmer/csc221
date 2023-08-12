@@ -48,6 +48,14 @@ class Player:
             self.y = 47
         move_to(self.shape, (10 * self.x + 5, 10 * self.y + 5))
         time.sleep(0.02)
+    def check_lost(self):
+        for robot in robots:
+            if ((player.x == robot.x) and (player.y == robot.y)):
+                playing = False
+                return True
+        if len(robots) == 0:
+            playing = False
+            return False
 
 class Robot:
     def __init__(self):
@@ -74,6 +82,7 @@ class Junk:
     
 begin_graphics(title = "Robots")
 player = Player()
+robots = []
 robot = Robot()
 while True:
     player.player_move()
