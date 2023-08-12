@@ -1,6 +1,6 @@
 from gasp import *    
 GRID_SIZE = 40                   
-MARGIN = 80             
+MARGIN = GRID_SIZE             
 BACKGROUND_COLOR = color.BLACK     
 WALL_COLOR = '#99E5E5'              
 the_layout = [
@@ -94,9 +94,9 @@ class Maze:
 
     def done(self):
         end_graphics()               # We've finished
-        self.map = []                       
+        self.map = [] 
+                      
 the_maze = Maze()                 
-
 while not the_maze.finished():    
     the_maze.play()
 
