@@ -19,9 +19,9 @@ the_layout = [
   "%o%%%.%.%%%.%%%%%%%.%%%.%.%%%o%",
   "%.....%........P........%.....%",
   "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"]
-class Immovable:
-    pass                                   # We have nothing to put in this class yet
-
+class Immovable:                    # This should already be in your program.
+    def is_a_wall(self):
+        return False  
 class Nothing(Immovable):
     pass
 class Wall(Immovable):
@@ -30,12 +30,26 @@ class Wall(Immovable):
         self.screen_point = maze.to_screen(point)
         self.maze = maze                            # Keep hold of Maze
         self.draw()
-
+    def is_a_wall(self):
+        return True
+ 
     def draw(self):
-        (screen_x, screen_y) = self.screen_point
-        dot_size = GRID_SIZE * 0.2
-        # Just draw circle
-        Circle(self.screen_point, dot_size, color=WALL_COLOR, filled=True)
+   # ...if you like.
+        (x, y) = self.place
+        # Make list of our neighbors.
+        neighbors = [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)]
+        # Check each neighbor in turn.
+        for neighbor in neighbors:
+            self.check_neighbor(neighbor)
+    def check_neighbor(self, neighbor):
+        maze = self.maze
+        object = maze.object_at(neighbor)            # Get object
+
+        if object.is_a_wall():                       # Is it a wall?
+            here = self.screen_point                 # Draw line from here...
+            there = maze.to_screen(neighbor)         # ... to there if it is
+            Line(here, there, color=WALL_COLOR, thickness=2)
+
 class Maze:
     def __init__(self):
         self.have_window = False        # We haven't made window yet
@@ -86,6 +100,17 @@ class Maze:
         (x, y) = point
         if character == '%':                    # Is it a wall?
             self.map[y][x] = Wall(self, point)
+    def object_at(self, point):
+        (x, y) = point
+
+        if y < 0 or y >= self.height:         # If point is outside maze,
+            return Nothing()                  # return nothing.
+
+        if x < 0 or x >= self.width:
+            return Nothing()
+
+        return self.map[y][x]
+    
     def finished(self):
         return self.game_over        # Stop if game is over
 
